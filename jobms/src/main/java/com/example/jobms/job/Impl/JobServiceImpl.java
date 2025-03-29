@@ -20,6 +20,9 @@ public class JobServiceImpl  implements JobService {
 @Autowired
 private JobRepository jobsRepository;
 
+@Autowired
+RestTemplate restTemplate;
+
 
     @Override
     public List<JobWithCompanyDto> findAll() {
@@ -40,8 +43,8 @@ private JobRepository jobsRepository;
         return jobWithCompanyDTOs;
     }
     private JobWithCompanyDto convertToDto(Job job){
-            RestTemplate restTemplate=new RestTemplate();
-            Company company=restTemplate.getForObject("http://localhost:8081/companies/"+job.getCompanyId(), Company.class);
+//            RestTemplate restTemplate=new RestTemplate();
+            Company company=restTemplate.getForObject("http://COMPANY-SERVICE:8081/companies/"+job.getCompanyId(), Company.class);
             JobWithCompanyDto jobWithCompanyDto=new JobWithCompanyDto();
             jobWithCompanyDto.setJob(job);
             jobWithCompanyDto.setCompany(company);
