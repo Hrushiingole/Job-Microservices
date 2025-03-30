@@ -1,6 +1,6 @@
 package com.example.jobms.job;
 
-import com.example.jobms.job.Dto.JobWithCompanyDto;
+import com.example.jobms.job.Dto.JobDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ public class JobController {
 
 
     @GetMapping
-    public ResponseEntity<List<JobWithCompanyDto>> findAll() {
-        List<JobWithCompanyDto> jobList=jobService.findAll();
+    public ResponseEntity<List<JobDto>> findAll() {
+        List<JobDto> jobList=jobService.findAll();
         return new ResponseEntity<>(jobList, HttpStatus.OK);
     }
     @PostMapping
@@ -30,8 +30,8 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobWithCompanyDto> getJobById(@PathVariable Long id) {
-        JobWithCompanyDto job=jobService.getJobById(id);
+    public ResponseEntity<JobDto> getJobById(@PathVariable Long id) {
+        JobDto job=jobService.getJobById(id);
         if(job!=null){
             return new ResponseEntity<>(jobService.getJobById(id), HttpStatus.OK);
         }
@@ -50,7 +50,7 @@ public class JobController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String > updateJob(@PathVariable Long id,@RequestBody Job job) {
-        JobWithCompanyDto prevJob=jobService.getJobById(id);
+        JobDto prevJob=jobService.getJobById(id);
         if(prevJob==null){
             return new ResponseEntity<>("job not found",HttpStatus.NOT_FOUND);
         }
