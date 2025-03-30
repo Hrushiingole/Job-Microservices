@@ -30,8 +30,8 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
-        Job job=jobService.getJobById(id);
+    public ResponseEntity<JobWithCompanyDto> getJobById(@PathVariable Long id) {
+        JobWithCompanyDto job=jobService.getJobById(id);
         if(job!=null){
             return new ResponseEntity<>(jobService.getJobById(id), HttpStatus.OK);
         }
@@ -50,11 +50,19 @@ public class JobController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String > updateJob(@PathVariable Long id,@RequestBody Job job) {
-        Job prevJob=jobService.getJobById(id);
+        JobWithCompanyDto prevJob=jobService.getJobById(id);
         if(prevJob==null){
             return new ResponseEntity<>("job not found",HttpStatus.NOT_FOUND);
         }
-       jobService.updateJob(prevJob,job);
+        Job pJob=new Job();
+        pJob.setId(prevJob.getId());
+        pJob.setDescription(prevJob.getDescription());
+        pJob.setLocation(prevJob.getLocation());
+        pJob.setMaxSalary(prevJob.getMaxSalary());
+        pJob.setMinSalary(prevJob.getMinSalary());
+        pJob.setTitle(prevJob.getTitle());
+        pJob.setCompanyId(prevJob.getCompany().getId());
+       jobService.updateJob(pJob,job);
         return new ResponseEntity<>("Job updated successfully",HttpStatus.OK);
     }
 
