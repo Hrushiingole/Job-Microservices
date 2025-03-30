@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/companies")
-public class companyController {
+public class CompanyController {
 
 
     @Autowired
@@ -49,6 +49,7 @@ public class companyController {
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
         Company company=companyService.getCompanyById(id);
         if (company == null) {
+            System.out.println("Company not found");
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
