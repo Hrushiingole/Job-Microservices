@@ -9,6 +9,7 @@ import com.example.jobms.job.clients.ReviewClient;
 import com.example.jobms.job.external.Company;
 import com.example.jobms.job.external.Review;
 import com.example.jobms.job.mapper.JobMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -37,6 +38,7 @@ private ReviewClient reviewClient;
 
 
     @Override
+    @CircuitBreaker(name = "companyBreaker")
     public List<JobDto> findAll() {
         List<Job> jobs = jobsRepository.findAll();
         List<JobDto> jobDTOS =new ArrayList<>();
