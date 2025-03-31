@@ -38,24 +38,26 @@ private ReviewClient reviewClient;
 
 
     @Override
-    @CircuitBreaker(name = "companyBreaker")
+    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
     public List<JobDto> findAll() {
         List<Job> jobs = jobsRepository.findAll();
-        List<JobDto> jobDTOS =new ArrayList<>();
+        List<JobDto> jobDTOS = new ArrayList<>();
 
-        for(Job job:jobs){
+        for (Job job : jobs) {
             jobDTOS.add(convertToDto(job));
         }
-
-
-
-        //using rest template for inter service communication
-//        RestTemplate restTemplate=new RestTemplate();
-//        Company company=restTemplate.getForObject("http://localhost:8081/companies/1", Company.class);
-//        System.out.println("COMPANY NAME: "+company.getTitle());
-//        System.out.println("COMPANY ID: "+company.getId());
         return jobDTOS;
     }
+
+    public List<JobDto> companyBreakerFallback(Exception e) {
+        List<JobDto> fallbackJobs = new ArrayList<>();
+        JobDto fallbackJob = new JobDto();
+        fallbackJob.setTitle("Data not found");
+        fallbackJobs.add(fallbackJob);
+        return fallbackJobs;
+    }
+
+
     private JobDto convertToDto(Job job){
 //            RestTemplate restTemplate=new RestTemplate();
 //code for inter service communication using rest template
