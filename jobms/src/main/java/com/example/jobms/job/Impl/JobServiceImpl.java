@@ -42,8 +42,8 @@ int attempt=0;
 
 
     @Override
-//    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
-//    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
     @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
     public List<JobDto> findAll() {
         System.out.println("attempt"+attempt++);
