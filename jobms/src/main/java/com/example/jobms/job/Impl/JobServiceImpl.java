@@ -10,6 +10,7 @@ import com.example.jobms.job.external.Company;
 import com.example.jobms.job.external.Review;
 import com.example.jobms.job.mapper.JobMapper;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -42,7 +43,8 @@ int attempt=0;
 
     @Override
 //    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
-    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+//    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
     public List<JobDto> findAll() {
         System.out.println("attempt"+attempt++);
         List<Job> jobs = jobsRepository.findAll();
