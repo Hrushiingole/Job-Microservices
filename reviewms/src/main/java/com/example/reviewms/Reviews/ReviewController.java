@@ -1,5 +1,6 @@
 package com.example.reviewms.Reviews;
 
+import com.example.reviewms.Reviews.messaging.ReviewMessageProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ReviewMessageProducer reviewMessageProducer;
+
     @GetMapping
     public ResponseEntity<List<Review>> getAllReviews(@RequestParam Long companyId) {
         List<Review> reviews = reviewService.getAllReviews(companyId);
@@ -23,8 +27,10 @@ public class ReviewController {
     public ResponseEntity<String> createReview(@RequestParam Long companyId, @RequestBody Review review) {
         Review createdReview = reviewService.createReview(companyId, review);
         if(createdReview==null){
+
             return new ResponseEntity<>("Company not found", HttpStatus.NOT_FOUND);
         }
+        reviewMessageProducer.sendMessage(createdReview);
         return ResponseEntity.ok("Review created successfully");
     }
 
