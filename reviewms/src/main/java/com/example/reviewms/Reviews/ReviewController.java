@@ -62,6 +62,12 @@ public class ReviewController {
         return ResponseEntity.ok("Review deleted successfully");
     }
 
+    @GetMapping("/averageRating")
+    public Double getAverageRating(@RequestParam Long companyId) {
+        List<Review> reviews=reviewService.getAllReviews(companyId);
+        return reviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
+    }
+
 
 
 }

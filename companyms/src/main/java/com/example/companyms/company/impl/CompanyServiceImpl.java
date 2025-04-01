@@ -4,16 +4,23 @@ package com.example.companyms.company.impl;
 import com.example.companyms.company.Company;
 import com.example.companyms.company.Companyservice;
 import com.example.companyms.company.Repository.CompanyRepository;
+import com.example.companyms.company.clients.ReviewClient;
 import com.example.companyms.company.dto.ReviewMessage;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 @Service
 public class CompanyServiceImpl implements Companyservice {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private ReviewClient reviewClient;
 
     @Override
     public Company createCompany(Company company) {
@@ -54,5 +61,15 @@ public class CompanyServiceImpl implements Companyservice {
     @Override
     public void updateCompanyRating(ReviewMessage reviewMessage) {
         System.out.println(reviewMessage.getDescription());
+        Company company=companyRepository.findById(reviewMessage.getCompanyId()).orElse(null);
+        if (company==null) {
+            throw new NotFoundException("Company not found"+reviewMessage.getCompanyId());
+        }
+        double averageRating=reviewClient.getAverageRating(reviewMessage.getCompanyId());
+        // Round to 2 decimal places
+        BigDecimal roundedRating = BigDecimal.valueOf(averageRating).setScale(2, RoundingMode.HALF_UP);
+
+        company.setRating(roundedRating.doubleValue());
+        companyRepository.save(company);
     }
 }
