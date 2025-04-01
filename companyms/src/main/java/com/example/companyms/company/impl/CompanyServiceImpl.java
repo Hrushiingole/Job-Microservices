@@ -63,7 +63,8 @@ public class CompanyServiceImpl implements Companyservice {
         System.out.println(reviewMessage.getDescription());
         Company company=companyRepository.findById(reviewMessage.getCompanyId()).orElse(null);
         if (company==null) {
-            throw new NotFoundException("Company not found"+reviewMessage.getCompanyId());
+            System.out.println("Company not found");
+            return;
         }
         double averageRating=reviewClient.getAverageRating(reviewMessage.getCompanyId());
         // Round to 2 decimal places
