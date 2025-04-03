@@ -69,6 +69,7 @@ services:
       - postgres
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
   jobms:
     image: hrushikesh393/jobms:latest
     container_name: job
@@ -82,6 +83,7 @@ services:
       - postgres
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://servicereg:8761/eureka
   reviewms:
     image: hrushikesh393/reviewms:latest
@@ -96,7 +98,7 @@ services:
       - postgres
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
 
   zipkin:
     image: openzipkin/zipkin
@@ -129,7 +131,7 @@ services:
       - postgres
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
 
 networks:
   microservices-network:
